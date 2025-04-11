@@ -1,0 +1,45 @@
+<style>
+    body {
+        background:
+#1a1a1a;
+    color: white;
+    padding: 20px;
+        }
+        button {
+            background:
+            #007BFF; /* Azul moderno */
+        }
+</style>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Agenda de Traduções</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        .container { max-width: 600px; margin: 0 auto; }
+        input, textarea { width: 100%; margin: 5px 0; }
+        button { background: #4CAF50; color: white; padding: 10px; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📖 Agenda de Traduções</h1>
+        
+        <!-- Formulário para adicionar texto -->
+        <input type="text" id="titulo" placeholder="Título da tradução">
+        <textarea id="texto" placeholder="Texto original" rows="4"></textarea>
+        <textarea id="traducao" placeholder="Texto traduzido" rows="4"></textarea>
+        <input type="text"
+        id="tags" placeholder="Tags (separadas por vírgula)">
+        <button onclick="salvarTexto()">Salvar</button>
+
+        <!-- Busca -->
+        <h3>🔍 Buscar</h3>
+        <input type="text" id="busca" placeholder="Digite uma palavra-chave" onkeyup="buscarTexto()">
+        <div id="resultados"></div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
