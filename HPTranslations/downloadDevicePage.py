@@ -71,6 +71,6 @@ def preparar_pagina_dispositivo(url, output_filename):
 
 # URL da página em português
 url_pt = "https://pt.ifixit.com/Device/HP_EliteBook_840_G9"
-output_file = "hp_elitebook_840_g9_pt.txt"
+output_file = "/media/udobaingo/Antigo Drive/Trados/HPOriginGuides/hp_elitebook_840_g9_pt.txt"
 
 preparar_pagina_dispositivo(url_pt, output_file)

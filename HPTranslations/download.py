@@ -11,15 +11,15 @@ IDS_FILE = "ids_guias.txt"
 # Lista para armazenar os IDs lidos do arquivo
 guide_ids = []
 try:
-    with open(IDS_FILE, "r", encoding="utf-8") as f:
-        guide_ids = [line.strip() for line in f if line.strip()]
+    with open(IDS_FILE, "r", encoding="utf-8") as f:
+        guide_ids = [line.strip() for line in f if line.strip()]
 except FileNotFoundError:
-    print(f"Erro: Arquivo de IDs '{IDS_FILE}' não encontrado.")
-    exit()
+    print(f"Erro: Arquivo de IDs '{IDS_FILE}' não encontrado.")
+    exit()
 
 if not guide_ids:
-    print(f"Aviso: O arquivo '{IDS_FILE}' está vazio ou não contém IDs válidos.")
-    exit()
+    print(f"Aviso: O arquivo '{IDS_FILE}' está vazio ou não contém IDs válidos.")
+    exit()
 
 OUTPUT_DIR = "/media/udobaingo/Antigo Drive/Trados/HPOriginGuides"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
@@ -27,52 +27,52 @@ os.makedirs(OUTPUT_DIR, exist_ok=True)
 API_BASE_URL = "https://www.ifixit.com/api/2.0/guides/"
 
 def filtrar_dados_para_trados(guide_data):
-    textos_para_traducao = []
-    def extrair_textos(data):
-        if isinstance(data, dict):
-            for chave, valor in data.items():
-                if chave not in ["id", "guid", "mini", "thumbnail", "140x105", "200x150", "standard", "440x330", "medium", "large", "huge", "original"] and isinstance(valor, str) and valor.strip():
-                    textos_para_traducao.append(valor.strip())
-                elif isinstance(valor, (dict, list)):
-                    extrair_textos(valor)
-        elif isinstance(data, list):
-            for item in data:
-                extrair_textos(item)
-    extrair_textos(guide_data)
-    return "\n".join(textos_para_traducao)
+    textos_para_traducao = []
+    def extrair_textos(data):
+        if isinstance(data, dict):
+            for chave, valor in data.items():
+                if chave not in ["id", "guid", "mini", "thumbnail", "140x105", "200x150", "standard", "440x330", "medium", "large", "huge", "original"] and isinstance(valor, str) and valor.strip():
+                    textos_para_traducao.append(valor.strip())
+                elif isinstance(valor, (dict, list)):
+                    extrair_textos(valor)
+        elif isinstance(data, list):
+            for item in data:
+                extrair_textos(item)
+    extrair_textos(guide_data)
+    return "\n".join(textos_para_traducao)
 
 # --- LÓGICA DE DOWNLOAD ---
 print(f"Iniciando download de {len(guide_ids)} guias listados em '{IDS_FILE}' para '{OUTPUT_DIR}'...")
 
 for guide_id in guide_ids:
-    api_url = f"{API_BASE_URL}{guide_id}"
-    output_filename_json = os.path.join(OUTPUT_DIR, f"guide_{guide_id}.json") # Mantive para referência, mas não será usado para Trados
+    api_url = f"{API_BASE_URL}{guide_id}"
+    output_filename_json = os.path.join(OUTPUT_DIR, f"guide_{guide_id}.json") # Mantive para referência, mas não será usado para Trados
 
-    if os.path.exists(output_filename_json): # Podemos mudar para verificar a existência do .txt se preferir pular guias já processados
-        print(f"Guia {guide_id} (JSON) já existe. Pulando.")
-        continue
+    if os.path.exists(output_filename_json): # Podemos mudar para verificar a existência do .txt se preferir pular guias já processados
+        print(f"Guia {guide_id} (JSON) já existe. Pulando.")
+        continue
 
-    try:
-        print(f"Baixando guia {guide_id}...")
-        response = requests.get(api_url)
-        response.raise_for_status()
+    try:
+        print(f"Baixando guia {guide_id}...")
+        response = requests.get(api_url)
+        response.raise_for_status()
 
-        guide_data = response.json()
-        textos_filtrados = filtrar_dados_para_trados(guide_data)
+        guide_data = response.json()
+        textos_filtrados = filtrar_dados_para_trados(guide_data)
 
-        output_filename_trados = os.path.join(OUTPUT_DIR, f"trados_guide_{guide_id}.txt")
-        with open(output_filename_trados, "w", encoding="utf-8") as f:
-            f.write(textos_filtrados)
+        output_filename_trados = os.path.join(OUTPUT_DIR, f"trados_guide_{guide_id}.txt")
+        with open(output_filename_trados, "w", encoding="utf-8") as f:
+            f.write(textos_filtrados)
 
-        print(f"Textos para tradução do guia {guide_id} salvos em '{output_filename_trados}' com sucesso.")
+        print(f"Textos para tradução do guia {guide_id} salvos em '{output_filename_trados}' com sucesso.")
 
-    except requests.exceptions.RequestException as e:
-        print(f"Erro de requisição ao baixar guia {guide_id}: {e}")
-    except json.JSONDecodeError:
-        print(f"Erro ao decodificar JSON para guia {guide_id}. Resposta inválida.")
-    except Exception as e:
-        print(f"Ocorreu um erro inesperado ao processar guia {guide_id}: {e}")
+    except requests.exceptions.RequestException as e:
+        print(f"Erro de requisição ao baixar guia {guide_id}: {e}")
+    except json.JSONDecodeError:
+        print(f"Erro ao decodificar JSON para guia {guide_id}. Resposta inválida.")
+    except Exception as e:
+        print(f"Ocorreu um erro inesperado ao processar guia {guide_id}: {e}")
 
-    time.sleep(0.5)
+    time.sleep(0.5)
 
 print("Processo de download concluído.")
