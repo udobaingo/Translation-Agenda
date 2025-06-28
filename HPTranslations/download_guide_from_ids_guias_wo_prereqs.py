@@ -21,7 +21,7 @@ if not guide_ids:
     print(f"Aviso: O arquivo '{IDS_FILE}' está vazio ou não contém IDs válidos.")
     exit()
 
-OUTPUT_DIR = "/media/udobaingo/Antigo Drive/Trados/HPOriginGuides"
+OUTPUT_DIR = "/media/udo-antonio-baingo/TOSHIBA EXT/MeusRecursosTrados/Trabalho_Final_HP/en-US/Novos_Guias_Para_Traduzir"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 API_BASE_URL = "https://www.ifixit.com/api/2.0/guides/"
